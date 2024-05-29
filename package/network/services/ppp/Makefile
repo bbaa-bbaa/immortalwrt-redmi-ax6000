@@ -29,6 +29,8 @@ PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
+TARGET_CFLAGS += -Wno-error=implicit-function-declaration
+
 include $(INCLUDE_DIR)/package.mk
 CONFIGURE_ARGS += \
 	--disable-cbcp \
