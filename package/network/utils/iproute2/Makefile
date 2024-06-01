@@ -25,8 +25,6 @@ include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
-TARGET_CFLAGS += -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types
-
 define Package/iproute2/Default
   SECTION:=net
   CATEGORY:=Network
