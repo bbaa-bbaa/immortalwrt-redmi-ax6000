@@ -2700,7 +2700,7 @@ TARGET_DEVICES += ubnt_edgerouter-x-sfp
 define Device/ubnt_unifi-6-lite
   $(Device/dsa-migration)
   DEVICE_VENDOR := Ubiquiti
-  DEVICE_MODEL := UniFi 6 Lite
+  DEVICE_MODEL := UniFi U6 Lite
   DEVICE_DTS_CONFIG := config@1
   DEVICE_DTS_LOADADDR := 0x87000000
   DEVICE_PACKAGES += kmod-mt7603 kmod-mt7915-firmware -uboot-envtools
@@ -2910,6 +2910,17 @@ define Device/winstars_ws-wn583a6
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615-firmware -uboot-envtools
 endef
 TARGET_DEVICES += winstars_ws-wn583a6
+
+define Device/wodesys_wd-r1802u
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  IMAGE_SIZE := 15808k
+  DEVICE_VENDOR := Wodesys
+  DEVICE_MODEL := WD-R1802U
+  DEVICE_PACKAGES := kmod-mt7915-firmware -uboot-envtools
+  SUPPORTED_DEVICES += mt7621-rfb-ax-nor
+endef
+TARGET_DEVICES += wodesys_wd-r1802u
 
 define Device/xiaomi_nand_separate
   $(Device/nand)
@@ -3280,7 +3291,7 @@ TARGET_DEVICES += zte_e8820s
 
 define Device/zyxel_lte3301-plus
   $(Device/nand)
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := LTE3301-PLUS
   KERNEL_SIZE := 31488k
   DEVICE_PACKAGES := kmod-mt7615-firmware kmod-usb3 kmod-usb-ledtrig-usbport \
@@ -3295,7 +3306,7 @@ TARGET_DEVICES += zyxel_lte3301-plus
 
 define Device/zyxel_lte5398-m904
   $(Device/nand)
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := LTE5398-M904
   KERNEL_SIZE := 31488k
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615-firmware kmod-usb3 uqmi \
@@ -3310,7 +3321,7 @@ TARGET_DEVICES += zyxel_lte5398-m904
 
 define Device/zyxel_nr7101
   $(Device/nand)
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := NR7101
   KERNEL_SIZE := 31488k
   DEVICE_PACKAGES := kmod-mt7603 kmod-usb3 kmod-usb-net-qmi-wwan kmod-usb-serial-option uqmi
@@ -3322,7 +3333,7 @@ TARGET_DEVICES += zyxel_nr7101
 
 define Device/zyxel_nwa-ax
   $(Device/nand)
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   KERNEL_SIZE := 8192k
   DEVICE_PACKAGES := kmod-mt7915-firmware zyxel-bootconfig
   KERNEL := kernel-bin | lzma | fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
@@ -3347,7 +3358,7 @@ define Device/zyxel_wap6805
   $(Device/nand)
   $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 32448k
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := WAP6805
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt7621-qtn-rgmii -uboot-envtools
   KERNEL := $$(KERNEL/lzma-loader) | uImage none | uimage-padhdr 160
@@ -3358,7 +3369,7 @@ define Device/zyxel_wsm20
   $(Device/nand)
   KERNEL_SIZE := 8192k
   IMAGE_SIZE := 41943040
-  DEVICE_VENDOR := ZyXEL
+  DEVICE_VENDOR := Zyxel
   DEVICE_MODEL := WSM20
   DEVICE_PACKAGES := kmod-mt7915-firmware
   KERNEL := kernel-bin | lzma | fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb | znet-header V1.00(ABZF.0)C0
