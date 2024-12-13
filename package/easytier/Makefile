@@ -5,36 +5,40 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=easytier
-PKG_VERSION:=1.2.3
-PKG_RELEASE:=2
+PKG_VERSION:=2.0.3
+PKG_RELEASE:=8
 
 #PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 #PKG_SOURCE_URL:=https://codeload.github.com/EasyTier/EasyTier/tar.gz/v$(PKG_VERSION)?
 #PKG_HASH:=5f78fa2f6b8f9d615eb79a88ccc2f3eb39ff68e5487746410dae36f9573dd342
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/EasyTier/EasyTier.git
-PKG_SOURCE_VERSION:=7b4a01e7fbdd45480b2f162bb6322fc312594557
+PKG_SOURCE_VERSION:=main
 PKG_SOURCE_SUBDIR:=EasyTier-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_MIRROR_HASH:=skip
+#PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_LICENSE:=GPL-3.0-only
 PKG_LICENSE_FILES:=LICENSE
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/EasyTier-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=rust/host
+PKG_BUILD_DEPENDS:=rust/host protobuf/host
 PKG_BUILD_PARALLEL:=1
 
-
 include $(INCLUDE_DIR)/package.mk
+TARGET_CFLAGS+= -ffat-lto-objects
 include $(INCLUDE_DIR)/../feeds/packages/lang/rust/rust-package.mk
 
 define Build/Prepare
-$(call Build/Prepare/Default)
-	cd $(PKG_BUILD_DIR)
-	git init
-	git remote add origin $(PKG_SOURCE_URL) || true
-	git fetch -v
-	git reset origin/main
+	$(call Build/Prepare/Default)
+	( \
+	cd $(PKG_BUILD_DIR); \
+	git init; \
+	git remote add origin $(PKG_SOURCE_URL); \
+	git fetch -v; \
+	git reset --hard origin/$(PKG_SOURCE_VERSION); \
+        exit 0; \
+	)
 endef
 
 define Build/Compile
@@ -66,5 +70,4 @@ define Package/easytier
   DEPENDS:=+ca-bundle +kmod-tun
 endef
 
-$(eval $(call RustBinPackage,easytier))
 $(eval $(call BuildPackage,easytier))
