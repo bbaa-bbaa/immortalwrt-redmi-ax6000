@@ -45,7 +45,7 @@ define Build/Compile
 	$(call Build/Compile/Cargo,easytier)
 endef
 
-define Package/easytier/install
+define Package/easytier-core/install
 	$(INSTALL_DIR) $(1)/etc/easytier
 	$(INSTALL_CONF) $(CURDIR)/files/config.toml $(1)/etc/easytier/config.toml
 
@@ -56,18 +56,41 @@ define Package/easytier/install
 	$(INSTALL_BIN) $(CURDIR)/files/easytier.init $(1)/etc/init.d/easytier
 
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/easytier-cli $(1)/usr/bin/easytier-cli
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/easytier-core $(1)/usr/bin/easytier-core
-
 endef
 
-define Package/easytier
+define Package/easytier-cli/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/easytier-cli $(1)/usr/bin/easytier-cli
+endef
+
+define Package/easytier-web/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/easytier-web $(1)/usr/bin/easytier-web
+endef
+
+define Package/easytier-core
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Mesh VPN
-  TITLE:=Mesh VPN
+  TITLE:=A simple, decentralized mesh VPN with WireGuard support
   URL:=https://github.com/EasyTier/EasyTier
   DEPENDS:=+ca-bundle +kmod-tun
 endef
 
-$(eval $(call BuildPackage,easytier))
+define Package/easytier-cli
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=A simple, decentralized mesh VPN with WireGuard support
+  URL:=https://github.com/EasyTier/EasyTier
+endef
+
+define Package/easytier-web
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=A simple, decentralized mesh VPN with WireGuard support
+  URL:=https://github.com/EasyTier/EasyTier
+endef
+
+$(eval $(call BuildPackage,easytier-core))
+$(eval $(call BuildPackage,easytier-cli))
+$(eval $(call BuildPackage,easytier-web))
