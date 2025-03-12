@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=easytier
-PKG_VERSION:=2.0.3
-PKG_RELEASE:=8
+PKG_VERSION:=2.2.2
+PKG_RELEASE:=2
 
 #PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 #PKG_SOURCE_URL:=https://codeload.github.com/EasyTier/EasyTier/tar.gz/v$(PKG_VERSION)?
@@ -37,12 +37,16 @@ define Build/Prepare
 	git remote add origin $(PKG_SOURCE_URL); \
 	git fetch -v; \
 	git reset --hard origin/$(PKG_SOURCE_VERSION); \
-        exit 0; \
+	exit 0; \
 	)
 endef
 
 define Build/Compile
-	$(call Build/Compile/Cargo,easytier)
+	( \
+	cd $(PKG_BUILD_DIR); \
+	cargo fetch --locked --target $(RUSTC_TARGET_ARCH); \
+	)
+	$(call Build/Compile/Cargo,easytier,--locked)
 endef
 
 define Package/easytier-core/install
