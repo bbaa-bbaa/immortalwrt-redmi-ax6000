@@ -1,1 +1,30 @@
+#!/bin/sh
 # This script is sourced by odhcp6c's dhcpv6.script at every DHCPv6 event.
+[ -z "$2" ] && echo "Error: should be run by odhcpc6c" && exit 1
+
+setup_interface() {
+	local device="$1"
+
+	for config in $(uci -X show network | grep -E "network\.[^\.]+=device" | sed 's/=device$//'); do
+		dev=$(uci -q get $config.name)
+		[ "$dev" = "$device" ] || continue
+		mtu=$(uci -q get $config.mtu6)
+		if [ -n "$mtu" ]; then
+			echo "$mtu" >/proc/sys/net/ipv6/conf/$device/mtu 2>/dev/null
+			logger -t odhcp6c "Setting MTU on $device to $mtu"
+		fi
+	done
+}
+
+case "$2" in
+bound)
+	setup_interface "$1"
+	;;
+informed | updated | rebound)
+	setup_interface "$1"
+	;;
+ra-updated)
+	[ -n "$ADDRESSES$RA_ADDRESSES$PREFIXES$USERPREFIX" ] && setup_interface "$1"
+	;;
+esac
+exit 0
