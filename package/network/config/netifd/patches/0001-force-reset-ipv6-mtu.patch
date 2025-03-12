@@ -1,0 +1,33 @@
+From 3e0cf08703be9dae17b9d5202c12d43ef07a58ab Mon Sep 17 00:00:00 2001
+From: bbaa <bbaa@bbaa.fun>
+Date: Wed, 12 Mar 2025 21:14:15 +0800
+Subject: [PATCH] force reset ipv6 mtu
+
+---
+ device.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/device.c b/device.c
+index 06f52cc..65c8620 100644
+--- a/device.c
++++ b/device.c
+@@ -992,6 +992,16 @@ void device_set_link(struct device *dev, bool state)
+ 	if (!state)
+ 		dev->auth_status = false;
+ 	device_broadcast_event(dev, state ? DEV_EVENT_LINK_UP : DEV_EVENT_LINK_DOWN);
++
++	// HACK: force reset ipv6 mtu
++	if (dev->link_active && (dev->settings.flags & DEV_OPT_MTU6)) {
++		unsigned int curr_mtu = system_update_ipv6_mtu(dev, 0);
++		if (curr_mtu != dev->settings.mtu6) {
++			system_update_ipv6_mtu(dev, dev->settings.mtu6);
++			netifd_log_message(L_WARNING, "%s '%s' mtu had been modified (%d), resetting to %d\n",
++				dev->type->name, dev->ifname, curr_mtu, dev->settings.mtu6);
++		}
++	}
+ }
+ 
+ void device_set_ifindex(struct device *dev, int ifindex)
+-- 
+2.48.1
+
