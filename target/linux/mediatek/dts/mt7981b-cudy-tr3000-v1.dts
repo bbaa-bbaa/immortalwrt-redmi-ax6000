@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: (GPL-2.0 OR MIT)
 
 /dts-v1/;
+
+#include <dt-bindings/leds/common.h>
+
 #include "mt7981b-cudy-tr3000-v1.dtsi"
 
 / {
