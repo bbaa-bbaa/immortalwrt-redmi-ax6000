@@ -1,0 +1,19 @@
+--- a/trace.h	2025-04-11 17:07:15.000000000 +0800
++++ b/trace.h	2025-05-13 22:00:54.719572630 +0800
+@@ -7,6 +7,7 @@
+ #define __MT76_TRACE_H
+ 
+ #include <linux/tracepoint.h>
++#include <linux/string.h>
+ #include "mt76.h"
+ 
+ #undef TRACE_SYSTEM
+@@ -14,7 +15,7 @@
+ 
+ #define MAXNAME		32
+ #define DEV_ENTRY	__array(char, wiphy_name, 32)
+-#define DEVICE_ASSIGN	strlcpy(__entry->wiphy_name,	\
++#define DEVICE_ASSIGN	strscpy(__entry->wiphy_name,	\
+ 				wiphy_name(dev->hw->wiphy), MAXNAME)
+ #define DEV_PR_FMT	"%s"
+ #define DEV_PR_ARG	__entry->wiphy_name

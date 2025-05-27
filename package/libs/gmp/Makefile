@@ -23,6 +23,9 @@ PKG_CPE_ID:=cpe:/a:gmplib:gmp
 
 PKG_BUILD_FLAGS:=no-mips16
 
+TARGET_CFLAGS+= -std=gnu17
+HOST_CFLAGS+= -std=gnu17
+
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
